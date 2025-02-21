@@ -90,10 +90,8 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
         final RadioGroup radioGroup = findViewById(R.id.navigation_radio_group);
         mHideGesturalHint = findViewById(R.id.hide_navigation_hint);
 
-        // Hide navigation hint checkbox when taskbar is enabled
-        if (mIsTaskbarEnabled) {
-            mHideGesturalHint.setVisibility(View.GONE);
-        }
+        // Hide navigation hint - we have different way of hiding gestural hint
+        mHideGesturalHint.setVisibility(View.GONE);
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -101,62 +99,19 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
                     mSelection = NAV_BAR_MODE_GESTURAL_OVERLAY;
                     navigationIllustration
                             .setAnimation(R.raw.lottie_system_nav_fully_gestural);
-                    revealHintCheckbox();
                     break;
                 case R.id.radio_two_button:
                     mSelection = NAV_BAR_MODE_2BUTTON_OVERLAY;
                     navigationIllustration.setAnimation(R.raw.lottie_system_nav_2_button);
-                    hideHintCheckBox();
                     break;
                 case R.id.radio_sw_keys:
                     mSelection = NAV_BAR_MODE_3BUTTON_OVERLAY;
                     navigationIllustration.setAnimation(R.raw.lottie_system_nav_3_button);
-                    hideHintCheckBox();
                     break;
             }
 
             navigationIllustration.playAnimation();
         });
-    }
-
-    private void revealHintCheckbox() {
-        if (mIsTaskbarEnabled) {
-            return;
-        }
-
-        mHideGesturalHint.animate().cancel();
-
-        if (mHideGesturalHint.getVisibility() == View.VISIBLE) {
-            return;
-        }
-
-        mHideGesturalHint.setVisibility(View.VISIBLE);
-        mHideGesturalHint.setAlpha(0.0f);
-        mHideGesturalHint.animate()
-                .translationY(0)
-                .alpha(1.0f)
-                .setListener(null);
-    }
-
-    private void hideHintCheckBox() {
-        if (mIsTaskbarEnabled) {
-            return;
-        }
-
-        if (mHideGesturalHint.getVisibility() == View.INVISIBLE) {
-            return;
-        }
-
-        mHideGesturalHint.animate()
-                .translationY(-mHideGesturalHint.getHeight())
-                .alpha(0.0f)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mHideGesturalHint.setVisibility(View.INVISIBLE);
-                    }
-                });
     }
 
     @Override
